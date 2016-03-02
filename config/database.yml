@@ -1,0 +1,21 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+  username: postgres
+  host: <%= ENV['DATABASE_URL'] %>
+
+development:
+  <<: *default
+  database: mafia-backend_development
+
+test:
+  <<: *default
+  database: mafia-backend_test
+
+production:
+  <<: *default
+  database: mafia-backend_production
+  username: mafia-backend
+  password: <%= ENV['MAFIA-BACKEND_DATABASE_PASSWORD'] %>

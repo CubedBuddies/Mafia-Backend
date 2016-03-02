@@ -1,0 +1,8 @@
+{
+  "name": "Mafia Backend",
+  "description": "The backend for an online Mafia game",
+  "image": "heroku/ruby",
+  "addons": [
+    "heroku-postgresql"
+  ]
+}
