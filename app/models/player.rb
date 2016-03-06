@@ -20,8 +20,13 @@ class Player < ActiveRecord::Base
   validates :name, presence: true
   validates :avatar_type, presence: true
 
-  enumerize :name, in: [
+  enumerize :role, in: [
     :townsperson,
     :mafia,
+  ]
+
+  enumerize :state, in: [
+    :alive,
+    :dead,
   ]
 end

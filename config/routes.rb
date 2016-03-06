@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   post '/games', to: 'games#create'
-  get  '/games/:id', to: 'games#show'
+  get  '/games/:token', to: 'games#show'
 
-  post '/games/:id/start', to: 'games#start'
+  post '/games/:token/start', to: 'games#start'
 
-  post '/games/:id/players', to: 'games#add_player'
-  post '/games/:id/events', to: 'games#add_event'
+  post '/games/:token/players', to: 'games#add_player'
+  post '/games/:token/events', to: 'games#add_event'
 end

@@ -4,8 +4,10 @@ class CreatePlayers < ActiveRecord::Migration
       t.belongs_to :game, index: true
 
       t.string :name
-      t.string :role
       t.string :avatar_type
+
+      t.string :role
+      t.string :state
 
       t.timestamps null: false
     end

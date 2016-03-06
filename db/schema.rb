@@ -14,21 +14,22 @@
 ActiveRecord::Schema.define(version: 20160305111953) do
 
   create_table "events", force: :cascade do |t|
-    t.integer  "game_id",             limit: 4
-    t.integer  "source_player_id_id", limit: 4
-    t.integer  "target_player_id_id", limit: 4
-    t.string   "name",                limit: 255
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
+    t.integer  "game_id",          limit: 4
+    t.integer  "source_player_id", limit: 4
+    t.integer  "target_player_id", limit: 4
+    t.string   "name",             limit: 255
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
   end
 
   add_index "events", ["game_id"], name: "index_events_on_game_id", using: :btree
-  add_index "events", ["source_player_id_id"], name: "index_events_on_source_player_id_id", using: :btree
-  add_index "events", ["target_player_id_id"], name: "index_events_on_target_player_id_id", using: :btree
+  add_index "events", ["source_player_id"], name: "index_events_on_source_player_id", using: :btree
+  add_index "events", ["target_player_id"], name: "index_events_on_target_player_id", using: :btree
 
   create_table "games", force: :cascade do |t|
     t.string   "token",      limit: 255
-    t.string   "status",     limit: 255
+    t.string   "state",      limit: 255
+    t.string   "winner",     limit: 255
     t.text     "data",       limit: 65535
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
@@ -37,8 +38,9 @@ ActiveRecord::Schema.define(version: 20160305111953) do
   create_table "players", force: :cascade do |t|
     t.integer  "game_id",     limit: 4
     t.string   "name",        limit: 255
-    t.string   "role",        limit: 255
     t.string   "avatar_type", limit: 255
+    t.string   "role",        limit: 255
+    t.string   "state",       limit: 255
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
   end
