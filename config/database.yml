@@ -1,10 +1,10 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql2
+  encoding: utf8
   pool: 5
-  timeout: 5000
-  username: ricksong
-  host: <%= ENV['DATABASE_URL'] %>
+  username: root
+  password:
+  socket: /tmp/mysql.sock
 
 development:
   <<: *default
@@ -18,4 +18,4 @@ production:
   <<: *default
   database: mafia-backend_production
   username: mafia-backend
-  password: <%= ENV['MAFIA-BACKEND_DATABASE_PASSWORD'] %>
+  password: <%= ENV['TEST-APP_DATABASE_PASSWORD'] %>
