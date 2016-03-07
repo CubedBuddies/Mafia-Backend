@@ -6,6 +6,8 @@ gem 'mysql2'
 gem 'jbuilder', '~> 2.0'
 gem 'enumerize'
 
+gem 'puma'
+
 gem 'pry-rails'
 
 group :development, :test do
