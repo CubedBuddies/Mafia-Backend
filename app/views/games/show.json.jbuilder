@@ -13,6 +13,7 @@ json.game do
   end
 
   json.players @game.players do |player|
+    json.id player.id
     json.name player.name
     json.role player.role
     json.state player.state

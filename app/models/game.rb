@@ -119,9 +119,7 @@ class Game < ActiveRecord::Base
   end
 
   def add_event(name:, source_player_id:, target_player_id:)
-    unless self.state == 'in_progress'
-      raise InvalidActionError, "Game is not in progress.  Can't add event to a game that is not in progress"
-    end
+    return unless self.state == 'in_progress'
 
     source_player = Player.find(source_player_id)
     target_player = Player.find(target_player_id)
