@@ -1,6 +1,7 @@
 json.game do
   json.token @game.token
   json.state @game.state
+  json.winner @game.winner
   json.created_at @game.created_at
   json.updated_at @game.updated_at
 
