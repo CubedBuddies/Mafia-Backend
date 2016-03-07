@@ -144,14 +144,14 @@ class Game < ActiveRecord::Base
       raise InvalidActionError, 'Event name does not exist'
     end
 
+    save!
+
     Event.create!(
       game: self,
       name: name,
       source_player: source_player,
       target_player: target_player,
     )
-
-    save!
   end
 
   def current_round
