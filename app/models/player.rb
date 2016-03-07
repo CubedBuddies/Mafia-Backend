@@ -19,7 +19,6 @@ class Player < ActiveRecord::Base
 
   validates :game, presence: true
   validates :name, presence: true
-  validates :avatar_type, presence: true
 
   enumerize :role, in: [
     :townsperson,
