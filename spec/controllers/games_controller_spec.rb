@@ -14,12 +14,15 @@ RSpec.describe GamesController, type: :controller do
       expect(token).to eq(game.token)
       expect(game.state).to eq('initializing')
 
+
       # Add players
       post :add_player, { token: token, player: { name: 'Charles Yeh', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Priscilla Lok', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Jenn Lee', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Connie Yu', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Christian Deonier', avatar_type: 'half-asian' } }
+
+      get :show, { token: token }
 
       game.reload
       expect(game.players.count).to eq(6)

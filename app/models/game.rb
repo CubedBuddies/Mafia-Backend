@@ -64,6 +64,7 @@ class Game < ActiveRecord::Base
   end
 
   def update_state!
+    return unless self.state == 'in_progress'
     return if Time.current < current_round['expires_at']
 
     if current_round['votes'].present?
