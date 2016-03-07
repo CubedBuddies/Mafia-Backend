@@ -29,21 +29,21 @@ class GamesController < ApplicationController
   end
 
   def show
-    @game = Game.where.not(state: 'finished').find_by(token: params[:token])
+    @game = Game.find_by(token: params[:token])
     @game.update_state!
 
     render 'show', status: :ok
   end
 
   def start
-    @game = Game.where.not(state: 'finished').find_by(token: params[:token])
+    @game = Game.find_by(token: params[:token])
     @game.start!
 
     render 'show', status: :ok
   end
 
   def add_player
-    @game = Game.where.not(state: 'finished').find_by(token: params[:token])
+    @game = Game.find_by(token: params[:token])
     @game.add_player(
       name: player_params[:name],
       avatar_type: player_params[:avatar_type],
@@ -53,7 +53,7 @@ class GamesController < ApplicationController
   end
 
   def add_event
-    @game = Game.where.not(state: 'finished').find_by(token: params[:token])
+    @game = Game.find_by(token: params[:token])
     @game.update_state!
     @game.add_event(
       name: event_params[:name],
