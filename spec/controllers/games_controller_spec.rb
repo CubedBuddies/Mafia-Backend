@@ -19,7 +19,7 @@ RSpec.describe GamesController, type: :controller do
   describe '#full_game_playthrough' do
     it 'runs through the game' do
       # Create game
-      post :create, { player: { name: 'Rick Song', avatar_type: 'asian' } }
+      post :create
 
       game = Game.last
       token = JSON.parse(response.body)['game']['token']
@@ -27,8 +27,8 @@ RSpec.describe GamesController, type: :controller do
       expect(token).to eq(game.token)
       expect(game.state).to eq('initializing')
 
-
       # Add players
+      post :add_player, { token: token, player: { name: 'Rick Song', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Charles Yeh', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Priscilla Lok', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Jenn Lee', avatar_type: 'asian' } }
@@ -57,13 +57,13 @@ RSpec.describe GamesController, type: :controller do
       mafia = game.players.where(role: 'mafia').pluck(:id).map(&:to_s)
 
       # Generate some votes
-      post :add_event, { token: token, event: { name: 'vote', source_player_id: townspeople[0], target_player_id: mafia[0] }}
+      post :add_event, { token: token, event: { name: 'lynch', source_player_id: townspeople[0], target_player_id: mafia[0] }}
       post :add_event, { token: token, event: { name: 'kill', source_player_id: mafia[0], target_player_id: townspeople[0] }}
 
       get :show, { token: token }
 
       game.reload
-      expect(game.current_round['votes']).to eq({townspeople[0] => mafia[0]})
+      expect(game.current_round['lynches']).to eq({townspeople[0] => mafia[0]})
       expect(game.current_round['kills']).to eq({mafia[0] => townspeople[0]})
 
       # Update the game again
@@ -71,6 +71,8 @@ RSpec.describe GamesController, type: :controller do
       get :show, { token: token }
 
       game.reload
+      expect(game.previous_round['killed_player_id']).to eq(townspeople[0])
+      expect(game.previous_round['lynched_player_id']).to eq(mafia[0])
       expect(game.players.where(state: 'alive', role: 'mafia').count).to eq(1)
       expect(game.players.where(state: 'alive', role: 'townsperson').count).to eq(3)
       expect(game.players.where(state: 'alive').count).to eq(4)
@@ -78,12 +80,10 @@ RSpec.describe GamesController, type: :controller do
       expect(game.rounds.count).to eq(2)
       expect(game.current_round['player_ids']).to match_array(game.players.where(state: 'alive').pluck(:id))
 
-      post :add_event, { token: token, event: { name: 'vote', source_player_id: townspeople[1], target_player_id: mafia[1] }}
-      post :add_event, { token: token, event: { name: 'vote', source_player_id: townspeople[2], target_player_id: mafia[1] }}
-      post :add_event, { token: token, event: { name: 'vote', source_player_id: townspeople[3], target_player_id: townspeople[1] }}
+      post :add_event, { token: token, event: { name: 'lynch', source_player_id: townspeople[1], target_player_id: mafia[1] }}
+      post :add_event, { token: token, event: { name: 'lynch', source_player_id: townspeople[2], target_player_id: mafia[1] }}
+      post :add_event, { token: token, event: { name: 'lynch', source_player_id: townspeople[3], target_player_id: townspeople[1] }}
       post :add_event, { token: token, event: { name: 'kill', source_player_id: mafia[1], target_player_id: townspeople[1] }}
-
-      pp JSON.parse(response.body)
 
       Timecop.freeze(Time.utc(2016, 10, 31, 12, 10, 0))
       get :show, { token: token }

@@ -68,22 +68,24 @@ class Game < ActiveRecord::Base
     return unless self.state == 'in_progress'
     return if Time.current < current_round['expires_at']
 
-    if current_round['votes'].present?
-      player_to_lynch_id = current_round['votes'].
+    if current_round['lynches'].present?
+      lynched_player_id = current_round['lynches'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
         first
 
-      self.players.find(player_to_lynch_id).update(state: 'dead')
+      current_round['lynched_player_id'] = lynched_player_id
+      self.players.find(lynched_player_id).update(state: 'dead')
     end
 
     if current_round['kills'].present?
-      player_to_kill_id = current_round['kills'].
+      killed_player_id = current_round['kills'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
         first
 
-      self.players.find(player_to_kill_id).update(state: 'dead')
+      current_round['killed_player_id'] = killed_player_id
+      self.players.find(killed_player_id).update(state: 'dead')
     end
 
     num_mafia_remaining = self.players.where(role: 'mafia', state: 'alive').count
@@ -136,8 +138,8 @@ class Game < ActiveRecord::Base
       end
 
       current_round['kills'][source_player_id] = target_player_id
-    when 'vote'
-      current_round['votes'][source_player_id] = target_player_id
+    when 'lynch'
+      current_round['lynches'][source_player_id] = target_player_id
     else
       raise InvalidActionError, 'Event name does not exist'
     end
@@ -153,18 +155,24 @@ class Game < ActiveRecord::Base
   end
 
   def current_round
-    self.rounds.last
+    self.rounds[-1]
+  end
+
+  def previous_round
+    self.rounds[-2]
   end
 
   private
 
   def create_new_round
     self.rounds << {
-      'player_ids' => self.players.where(state: 'alive').pluck(:id),
-      'votes'      => {},
-      'kills'      => {},
-      'created_at' => Time.current,
-      'expires_at' => Time.current + 5.minutes,
+      'player_ids'        => self.players.where(state: 'alive').pluck(:id),
+      'lynches'           => {},
+      'lynched_player_id' => nil,
+      'kills'             => {},
+      'killed_player_id'  => nil,
+      'created_at'        => Time.current,
+      'expires_at'        => Time.current + 5.minutes,
     }
   end
 

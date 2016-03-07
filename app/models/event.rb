@@ -23,6 +23,6 @@ class Event < ActiveRecord::Base
 
   enumerize :name, in: [
     :kill,
-    :vote,
+    :lynch,
   ]
 end

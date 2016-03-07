@@ -20,10 +20,6 @@ class GamesController < ApplicationController
 
   def create
     @game = Game.create!
-    @game.add_player(
-      name: player_params[:name],
-      avatar_type: player_params[:avatar_type]
-    )
 
     render 'show', status: :created
   end
