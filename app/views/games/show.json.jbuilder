@@ -11,8 +11,8 @@ json.game do
     json.lynched_player_id round.fetch('lynched_player_id')
     json.kills             round.fetch('kills')
     json.killed_player_id  round.fetch('killed_player_id')
-    json.created_at        round.fetch('created_at')
-    json.expires_at        round.fetch('expires_at')
+    json.created_at        round.fetch('created_at').to_json
+    json.expires_at        round.fetch('expires_at').to_json
   end
 
   json.players @game.players do |player|
