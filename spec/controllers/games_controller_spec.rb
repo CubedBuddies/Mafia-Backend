@@ -34,6 +34,16 @@ RSpec.describe GamesController, type: :controller do
       post :add_player, { token: token, player: { name: 'Jenn Lee', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Connie Yu', avatar_type: 'asian' } }
       post :add_player, { token: token, player: { name: 'Christian Deonier', avatar_type: 'half-asian' } }
+      post :add_player, { token: token, player: { name: 'Isis Anchalee', avatar_type: 'arabic' } }
+
+      get :show, { token: token }
+
+      game.reload
+      expect(game.players.count).to eq(7)
+
+      # Remove a player
+      players = game.players
+      delete :remove_player, { token: token, player_id: players[-1].id }
 
       get :show, { token: token }
 
@@ -49,8 +59,8 @@ RSpec.describe GamesController, type: :controller do
       expect(game.players.where(state: 'alive', role: 'mafia').count).to eq(2)
       expect(game.players.where(state: 'alive', role: 'townsperson').count).to eq(4)
       expect(game.players.where(state: 'alive').count).to eq(6)
-      expect(game.current_round['created_at']).to eq(Time.utc(2016, 10, 31, 12, 0, 0).to_s)
-      expect(game.current_round['expires_at']).to eq(Time.utc(2016, 10, 31, 12, 5, 0).to_s)
+      expect(game.current_round['created_at']).to eq(Time.utc(2016, 10, 31, 12, 0, 0).to_json)
+      expect(game.current_round['expires_at']).to eq(Time.utc(2016, 10, 31, 12, 5, 0).to_json)
       expect(game.current_round['player_ids']).to match_array(game.players.pluck(:id))
 
       townspeople = game.players.where(role: 'townsperson').pluck(:id).map(&:to_s)

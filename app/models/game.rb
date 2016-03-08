@@ -116,7 +116,7 @@ class Game < ActiveRecord::Base
 
   def add_player(name:, avatar_type:)
     unless self.state == 'initializing'
-      raise InvalidActionError, "Game is not initializing.  Can't add player to non-initializing game."
+      raise InvalidActionError, "Game is not initializing.  Can't add player to a non-initializing game."
     end
 
     Player.create!(
@@ -124,6 +124,14 @@ class Game < ActiveRecord::Base
       name: name,
       avatar_type: avatar_type,
     )
+  end
+
+  def remove_player(id:)
+    unless self.state == 'initializing'
+      raise InvalidActionError, "Game is not initializing.  Can't remove player from a non-initializing game."
+    end
+
+    self.players.find(id).destroy!
   end
 
   def add_event(name:, source_player_id:, target_player_id:)

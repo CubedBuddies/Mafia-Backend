@@ -48,6 +48,13 @@ class GamesController < ApplicationController
     render template: 'players/show', status: :ok
   end
 
+  def remove_player
+    @game = Game.find_by(token: params[:token])
+    @game.remove_player(id: params[:player_id])
+
+    render template: 'games/show', status: :ok
+  end
+
   def add_event
     @game = Game.find_by(token: params[:token])
     @game.update_state!
