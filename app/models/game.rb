@@ -44,6 +44,11 @@ class Game < ActiveRecord::Base
       end
 
       num_players = self.players.count
+
+      if num_players < 6
+        raise InvalidActionError, "Game has too few players.  Mafia requires 6 players to start and this game currently has #{num_players}."
+      end
+
       num_mafia = (num_players ** 0.5).floor
       num_townsperson = num_players - num_mafia
 
@@ -66,7 +71,7 @@ class Game < ActiveRecord::Base
 
   def update_state!
     return unless self.state == 'in_progress'
-    return if Time.current < current_round['expires_at']
+    return if Time.current < current_round['expires_at'].to_time
 
     if current_round['lynches'].present?
       lynched_player_id = current_round['lynches'].
@@ -171,8 +176,8 @@ class Game < ActiveRecord::Base
       'lynched_player_id' => nil,
       'kills'             => {},
       'killed_player_id'  => nil,
-      'created_at'        => Time.current,
-      'expires_at'        => Time.current + 5.minutes,
+      'created_at'        => (Time.current).to_json,
+      'expires_at'        => (Time.current + 5.minutes).to_json,
     }
   end
 
