@@ -41,6 +41,14 @@ RSpec.describe GamesController, type: :controller do
       game.reload
       expect(game.players.count).to eq(7)
 
+      # Adding duplicate player
+      post :add_player, { token: token, player: { name: 'Isis Anchalee', avatar_type: 'arabic' } }
+
+      get :show, { token: token }
+
+      game.reload
+      expect(game.players.count).to eq(7)
+
       # Remove a player
       players = game.players
       delete :remove_player, { token: token, player_id: players[-1].id }

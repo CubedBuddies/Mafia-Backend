@@ -18,6 +18,10 @@ class GamesController < ApplicationController
     render json: {message: error.message}, status: :bad_request
   end
 
+  rescue_from ActiveRecord::RecordInvalid do |error|
+    render json: {message: error.message}, status: :bad_request
+  end
+
   def create
     @game = Game.create!
 

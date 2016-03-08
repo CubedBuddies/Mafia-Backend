@@ -17,8 +17,12 @@ class Player < ActiveRecord::Base
 
   belongs_to :game
 
-  validates :game, presence: true
-  validates :name, presence: true
+  validates :game,
+            presence: true
+
+  validates :name,
+            presence: true,
+            uniqueness: { scope: :game, message: 'name must be unique per game' }
 
   enumerize :role, in: [
     :townsperson,
