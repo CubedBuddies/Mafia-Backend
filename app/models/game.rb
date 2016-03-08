@@ -14,6 +14,8 @@
 class Game < ActiveRecord::Base
   extend Enumerize
 
+  MIN_PLAYERS_FOR_GAME = 3
+
   store :data, accessors: [:rounds], coder: JSON
 
   has_many :events
@@ -45,7 +47,7 @@ class Game < ActiveRecord::Base
 
       num_players = self.players.count
 
-      if num_players < 6
+      if num_players < MIN_PLAYERS_FOR_GAME
         raise InvalidActionError, "Game has too few players.  Mafia requires 6 players to start and this game currently has #{num_players}."
       end
 
