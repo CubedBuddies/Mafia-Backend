@@ -25,8 +25,7 @@ class GamesController < ApplicationController
   def create
     @game = Game.create!
 
-    # render template: 'games/show', status: :created
-    render json: {message: "ERRORRRRR"}, status: :bad_request
+    render template: 'games/show', status: :created
   end
 
   def show
