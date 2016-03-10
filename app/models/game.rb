@@ -75,8 +75,8 @@ class Game < ActiveRecord::Base
     return unless self.state == 'in_progress'
     return if Time.current < current_round['expires_at'].to_time
 
-    if current_round['lynches'].present?
-      lynched_player_id = current_round['lynches'].
+    if current_round['lynch_votes'].present?
+      lynched_player_id = current_round['lynch_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
         first
@@ -85,8 +85,8 @@ class Game < ActiveRecord::Base
       self.players.find(lynched_player_id).update(state: 'dead')
     end
 
-    if current_round['kills'].present?
-      killed_player_id = current_round['kills'].
+    if current_round['kill_votes'].present?
+      killed_player_id = current_round['kill_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
         first
@@ -152,9 +152,9 @@ class Game < ActiveRecord::Base
         raise InvalidActionError, 'Source player #{source_player_id} cannot perform `kill` action'
       end
 
-      current_round['kills'][source_player_id] = target_player_id
+      current_round['kill_votes'][source_player_id] = target_player_id
     when 'lynch'
-      current_round['lynches'][source_player_id] = target_player_id
+      current_round['lynch_votes'][source_player_id] = target_player_id
     else
       raise InvalidActionError, 'Event name does not exist'
     end
@@ -182,9 +182,9 @@ class Game < ActiveRecord::Base
   def create_new_round
     self.rounds << {
       'player_ids'        => self.players.where(state: 'alive').pluck(:id),
-      'lynches'           => {},
+      'lynch_votes'       => {},
       'lynched_player_id' => nil,
-      'kills'             => {},
+      'kill_votes'        => {},
       'killed_player_id'  => nil,
       'created_at'        => (Time.current).to_json,
       'expires_at'        => (Time.current + 5.minutes).to_json,

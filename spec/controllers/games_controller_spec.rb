@@ -81,8 +81,8 @@ RSpec.describe GamesController, type: :controller do
       get :show, { token: token }
 
       game.reload
-      expect(game.current_round['lynches']).to eq({townspeople[0] => mafia[0]})
-      expect(game.current_round['kills']).to eq({mafia[0] => townspeople[0]})
+      expect(game.current_round['lycnh_votes']).to eq({townspeople[0] => mafia[0]})
+      expect(game.current_round['kill_votes']).to eq({mafia[0] => townspeople[0]})
 
       # Update the game again
       Timecop.freeze(Time.utc(2016, 10, 31, 12, 5, 0))

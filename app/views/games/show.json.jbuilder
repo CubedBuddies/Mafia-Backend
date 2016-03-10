@@ -7,9 +7,9 @@ json.game do
 
   json.rounds @game.rounds do |round|
     json.player_ids        round.fetch('player_ids')
-    json.lynches           round.fetch('lynches')
+    json.lynch_votes       round.fetch('lynch_votes')
     json.lynched_player_id round.fetch('lynched_player_id')
-    json.kills             round.fetch('kills')
+    json.kill_votes        round.fetch('kill_votes')
     json.killed_player_id  round.fetch('killed_player_id')
     json.created_at        round.fetch('created_at')
     json.expires_at        round.fetch('expires_at')
