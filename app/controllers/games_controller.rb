@@ -28,6 +28,7 @@ class GamesController < ApplicationController
     # TODO: remove this in future
     @game.add_player(name: "Test Player 1", avatar_type: "Blank")
     @game.add_player(name: "Test Player 2", avatar_type: "Blank")
+    @game.add_player(name: "Test Player 3", avatar_type: "Blank")
 
     render template: 'games/show', status: :created
   end
