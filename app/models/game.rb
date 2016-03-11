@@ -187,7 +187,7 @@ class Game < ActiveRecord::Base
       'kill_votes'        => {},
       'killed_player_id'  => nil,
       'created_at'        => (Time.current).to_json,
-      'expires_at'        => (Time.current + 5.minutes).to_json,
+      'expires_at'        => (Time.current + 30.seconds).to_json,
     }
   end
 
