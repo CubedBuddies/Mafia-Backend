@@ -17,6 +17,6 @@ FactoryGirl.define do
     game
 
     name        { Forgery(:name).first_name }
-    avatar_type { 'asian' }
+    avatar_type { ["boy1", "boy2", "girl1", "girl2"].sample }
   end
 end
