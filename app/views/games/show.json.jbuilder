@@ -4,6 +4,7 @@ json.game do
   json.winner @game.winner
   json.created_at @game.created_at
   json.updated_at @game.updated_at
+  json.current_time Time.current
 
   json.rounds @game.rounds do |round|
     json.player_ids        round.fetch('player_ids')
