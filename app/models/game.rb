@@ -180,14 +180,15 @@ class Game < ActiveRecord::Base
   private
 
   def create_new_round
+    start_time = Time.current + 10.seconds
     self.rounds << {
       'player_ids'        => self.players.where(state: 'alive').pluck(:id),
       'lynch_votes'       => {},
       'lynched_player_id' => nil,
       'kill_votes'        => {},
       'killed_player_id'  => nil,
-      'created_at'        => (Time.current).to_json,
-      'expires_at'        => (Time.current + 30.seconds).to_json,
+      'created_at'        => (start_time).to_json,
+      'expires_at'        => (start_time + 30.seconds).to_json,
     }
   end
 
