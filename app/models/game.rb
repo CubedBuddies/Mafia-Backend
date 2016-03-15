@@ -79,7 +79,7 @@ class Game < ActiveRecord::Base
       lynched_player_id = current_round['lynch_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
-        first
+        sample
 
       current_round['lynched_player_id'] = lynched_player_id
       self.players.find(lynched_player_id).update(state: 'dead')
@@ -89,7 +89,7 @@ class Game < ActiveRecord::Base
       killed_player_id = current_round['kill_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
-        first
+        sample
 
       current_round['killed_player_id'] = killed_player_id
       self.players.find(killed_player_id).update(state: 'dead')
