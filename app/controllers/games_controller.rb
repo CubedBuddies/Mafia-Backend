@@ -26,9 +26,10 @@ class GamesController < ApplicationController
     @game = Game.create!
 
     # TODO: remove this in future
-    @game.add_player(name: "Test Player 1", avatar_type: "Blank")
-    @game.add_player(name: "Test Player 2", avatar_type: "Blank")
-    @game.add_player(name: "Test Player 3", avatar_type: "Blank")
+    @game.add_player(name: "Test Player 1", avatar_type: "girl1")
+    @game.add_player(name: "Test Player 2", avatar_type: "girl2")
+    @game.add_player(name: "Test Player 3", avatar_type: "boy1")
+    @game.add_player(name: "Test Player 4", avatar_type: "boy2")
 
     render template: 'games/show', status: :created
   end
