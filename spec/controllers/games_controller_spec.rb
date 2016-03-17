@@ -23,19 +23,76 @@ RSpec.describe GamesController, type: :controller do
 
       game = Game.last
       token = JSON.parse(response.body)['game']['token']
-      avatar_image = fixture_file_upload('avatar.png', 'image/png')
+      avatar_file_name = 'avatar.png'
+      avatar_file_data = Base64.encode64(fixture_file_upload('avatar.png', 'image/png').read)
 
       expect(token).to eq(game.token)
       expect(game.state).to eq('initializing')
 
       # Add players
-      post :add_player, { token: token, player: { name: 'Rick Song',         avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Charles Yeh',       avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Priscilla Lok',     avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Jenn Lee',          avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Connie Yu',         avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Christian Deonier', avatar: avatar_image } }
-      post :add_player, { token: token, player: { name: 'Isis Anchalee',     avatar: avatar_image } }
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Rick Song',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Charles Yeh',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Priscilla Lok',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Jenn Lee',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Connie Yu',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Christian Deonier',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Isis Anchalee',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
+
 
       get :show, { token: token }
 
@@ -43,7 +100,14 @@ RSpec.describe GamesController, type: :controller do
       expect(game.players.count).to eq(7)
 
       # Adding duplicate player
-      post :add_player, { token: token, player: { name: 'Isis Anchalee' } }
+      post :add_player, {
+            token: token,
+            player: {
+                  name: 'Isis Anchalee',
+                  avatar_file_name: avatar_file_name,
+                  avatar_file_data: avatar_file_data
+            }
+      }
 
       get :show, { token: token }
 

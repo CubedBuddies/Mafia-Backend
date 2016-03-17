@@ -50,10 +50,14 @@ class GamesController < ApplicationController
   end
 
   def add_player
+    name = player_params[:name]
+    avatar = Paperclip.io_adapters.for("data:image/png;base64,#{player_params[:avatar_file_data]}")
+    avatar.original_filename = player_params[:avatar_file_name]
+
     @game = Game.find_by(token: params[:token])
     @player = @game.add_player(
-      name: player_params[:name],
-      avatar: player_params[:avatar],
+      name: name,
+      avatar: avatar,
     )
 
     render template: 'players/show', status: :ok
@@ -86,10 +90,33 @@ class GamesController < ApplicationController
   end
 
   def player_params
-    params.require(:player).permit(:name, :avatar)
+    params.require(:player).permit(:name, :avatar_file_name, :avatar_file_data)
   end
 
   def event_params
     params.require(:event).permit(:name, :source_player_id, :target_player_id)
+  end
+
+  # This part is actually taken from http://blag.7tonlnu.pl/blog/2014/01/22/uploading-images-to-a-rails-app-via-json-api. I tweaked it a bit by manually setting the tempfile's content type because somehow putting it in a hash during initialization didn't work for me.
+  def parse_image_data(image_data)
+    @tempfile = Tempfile.new('item_image')
+    @tempfile.binmode
+    @tempfile.write Base64.decode64(image_data[:content])
+    @tempfile.rewind
+
+    uploaded_file = ActionDispatch::Http::UploadedFile.new(
+      tempfile: @tempfile,
+      filename: image_data[:filename]
+    )
+
+    uploaded_file.content_type = image_data[:content_type]
+    uploaded_file
+  end
+
+  def clean_tempfile
+    if @tempfile
+      @tempfile.close
+      @tempfile.unlink
+    end
   end
 end
