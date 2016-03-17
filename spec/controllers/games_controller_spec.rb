@@ -23,20 +23,19 @@ RSpec.describe GamesController, type: :controller do
 
       game = Game.last
       token = JSON.parse(response.body)['game']['token']
+      avatar_image = fixture_file_upload('avatar.png', 'image/png')
 
       expect(token).to eq(game.token)
       expect(game.state).to eq('initializing')
 
       # Add players
-      # fixture_file_upload('avatar.png', 'image/png')
-
-      post :add_player, { token: token, player: { name: 'Rick Song' } }
-      post :add_player, { token: token, player: { name: 'Charles Yeh' } }
-      post :add_player, { token: token, player: { name: 'Priscilla Lok' } }
-      post :add_player, { token: token, player: { name: 'Jenn Lee' } }
-      post :add_player, { token: token, player: { name: 'Connie Yu' } }
-      post :add_player, { token: token, player: { name: 'Christian Deonier' } }
-      post :add_player, { token: token, player: { name: 'Isis Anchalee' } }
+      post :add_player, { token: token, player: { name: 'Rick Song',         avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Charles Yeh',       avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Priscilla Lok',     avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Jenn Lee',          avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Connie Yu',         avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Christian Deonier', avatar: avatar_image } }
+      post :add_player, { token: token, player: { name: 'Isis Anchalee',     avatar: avatar_image } }
 
       get :show, { token: token }
 
