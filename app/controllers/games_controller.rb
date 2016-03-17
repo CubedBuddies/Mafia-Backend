@@ -25,11 +25,12 @@ class GamesController < ApplicationController
   def create
     @game = Game.create!
 
-    # TODO: remove this in future
-    @game.add_player(name: "Test Player 1", avatar_type: "girl1")
-    @game.add_player(name: "Test Player 2", avatar_type: "girl2")
-    @game.add_player(name: "Test Player 3", avatar_type: "boy1")
-    @game.add_player(name: "Test Player 4", avatar_type: "boy2")
+    unless Rails.env.test?
+      @game.add_player(name: "Test Player 1")
+      @game.add_player(name: "Test Player 2")
+      @game.add_player(name: "Test Player 3")
+      @game.add_player(name: "Test Player 4")
+    end
 
     render template: 'games/show', status: :created
   end
@@ -52,7 +53,7 @@ class GamesController < ApplicationController
     @game = Game.find_by(token: params[:token])
     @player = @game.add_player(
       name: player_params[:name],
-      avatar_type: player_params[:avatar_type],
+      avatar: player_params[:avatar],
     )
 
     render template: 'players/show', status: :ok
@@ -85,7 +86,7 @@ class GamesController < ApplicationController
   end
 
   def player_params
-    params.require(:player).permit(:name, :avatar_type)
+    params.require(:player).permit(:name, :avatar)
   end
 
   def event_params

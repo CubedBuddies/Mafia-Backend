@@ -28,13 +28,15 @@ RSpec.describe GamesController, type: :controller do
       expect(game.state).to eq('initializing')
 
       # Add players
-      post :add_player, { token: token, player: { name: 'Rick Song', avatar_type: 'asian' } }
-      post :add_player, { token: token, player: { name: 'Charles Yeh', avatar_type: 'asian' } }
-      post :add_player, { token: token, player: { name: 'Priscilla Lok', avatar_type: 'asian' } }
-      post :add_player, { token: token, player: { name: 'Jenn Lee', avatar_type: 'asian' } }
-      post :add_player, { token: token, player: { name: 'Connie Yu', avatar_type: 'asian' } }
-      post :add_player, { token: token, player: { name: 'Christian Deonier', avatar_type: 'half-asian' } }
-      post :add_player, { token: token, player: { name: 'Isis Anchalee', avatar_type: 'arabic' } }
+      # fixture_file_upload('avatar.png', 'image/png')
+
+      post :add_player, { token: token, player: { name: 'Rick Song' } }
+      post :add_player, { token: token, player: { name: 'Charles Yeh' } }
+      post :add_player, { token: token, player: { name: 'Priscilla Lok' } }
+      post :add_player, { token: token, player: { name: 'Jenn Lee' } }
+      post :add_player, { token: token, player: { name: 'Connie Yu' } }
+      post :add_player, { token: token, player: { name: 'Christian Deonier' } }
+      post :add_player, { token: token, player: { name: 'Isis Anchalee' } }
 
       get :show, { token: token }
 
@@ -42,7 +44,7 @@ RSpec.describe GamesController, type: :controller do
       expect(game.players.count).to eq(7)
 
       # Adding duplicate player
-      post :add_player, { token: token, player: { name: 'Isis Anchalee', avatar_type: 'arabic' } }
+      post :add_player, { token: token, player: { name: 'Isis Anchalee' } }
 
       get :show, { token: token }
 
@@ -67,8 +69,8 @@ RSpec.describe GamesController, type: :controller do
       expect(game.players.where(state: 'alive', role: 'mafia').count).to eq(2)
       expect(game.players.where(state: 'alive', role: 'townsperson').count).to eq(4)
       expect(game.players.where(state: 'alive').count).to eq(6)
-      expect(game.current_round['created_at']).to eq(Time.utc(2016, 10, 31, 12, 0, 0).to_json)
-      expect(game.current_round['expires_at']).to eq(Time.utc(2016, 10, 31, 12, 5, 0).to_json)
+      expect(game.current_round['created_at']).to eq(Time.utc(2016, 10, 31, 12, 0, 10).to_json)
+      expect(game.current_round['expires_at']).to eq(Time.utc(2016, 10, 31, 12, 0, 40).to_json)
       expect(game.current_round['player_ids']).to match_array(game.players.pluck(:id))
 
       townspeople = game.players.where(role: 'townsperson').pluck(:id).map(&:to_s)

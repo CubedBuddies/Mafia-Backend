@@ -76,10 +76,11 @@ class Game < ActiveRecord::Base
     return if Time.current < current_round['expires_at'].to_time
 
     if current_round['lynch_votes'].present?
+      # TODO: Make this select a random person
       lynched_player_id = current_round['lynch_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
-        sample
+        first
 
       current_round['lynched_player_id'] = lynched_player_id
       self.players.find(lynched_player_id).update(state: 'dead')
@@ -89,7 +90,7 @@ class Game < ActiveRecord::Base
       killed_player_id = current_round['kill_votes'].
         group_by(&:last).
         max_by { |source_player_id, votes_player_ids| votes_player_ids.count }.
-        sample
+        first
 
       current_round['killed_player_id'] = killed_player_id
       self.players.find(killed_player_id).update(state: 'dead')
@@ -116,7 +117,7 @@ class Game < ActiveRecord::Base
     save!
   end
 
-  def add_player(name:, avatar_type:)
+  def add_player(name:, avatar: nil)
     unless self.state == 'initializing'
       raise InvalidActionError, "Game is not initializing.  Can't add player to a non-initializing game."
     end
@@ -124,7 +125,7 @@ class Game < ActiveRecord::Base
     Player.create!(
       game: self,
       name: name,
-      avatar_type: avatar_type,
+      avatar: avatar,
     )
   end
 

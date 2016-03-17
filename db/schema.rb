@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160305111953) do
+ActiveRecord::Schema.define(version: 20160317025949) do
 
   create_table "events", force: :cascade do |t|
     t.integer  "game_id",          limit: 4
@@ -36,13 +36,16 @@ ActiveRecord::Schema.define(version: 20160305111953) do
   end
 
   create_table "players", force: :cascade do |t|
-    t.integer  "game_id",     limit: 4
-    t.string   "name",        limit: 255
-    t.string   "avatar_type", limit: 255
-    t.string   "role",        limit: 255
-    t.string   "state",       limit: 255
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.integer  "game_id",             limit: 4
+    t.string   "name",                limit: 255
+    t.string   "role",                limit: 255
+    t.string   "state",               limit: 255
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
+    t.string   "avatar_file_name",    limit: 255
+    t.string   "avatar_content_type", limit: 255
+    t.integer  "avatar_file_size",    limit: 4
+    t.datetime "avatar_updated_at"
   end
 
   add_index "players", ["game_id"], name: "index_players_on_game_id", using: :btree

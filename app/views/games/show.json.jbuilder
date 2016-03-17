@@ -21,6 +21,6 @@ json.game do
     json.name player.name
     json.role player.role
     json.state player.state
-    json.avatar_type player.avatar_type
+    json.avatar_url player.avatar.url
   end
 end

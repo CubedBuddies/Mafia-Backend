@@ -5,6 +5,7 @@ gem 'rails', '~> 4.2'
 gem 'mysql2'
 gem 'jbuilder', '~> 2.0'
 gem 'enumerize'
+gem 'paperclip'
 
 gem 'puma'
 
