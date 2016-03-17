@@ -51,8 +51,10 @@ class GamesController < ApplicationController
 
   def add_player
     name = player_params[:name]
-    avatar = Paperclip.io_adapters.for("data:image/png;base64,#{player_params[:avatar_file_data]}")
-    avatar.original_filename = player_params[:avatar_file_name]
+    if player_params[:avatar_file_data] && player_params[:avatar_file_name]
+      avatar = Paperclip.io_adapters.for("data:image/png;base64,#{player_params[:avatar_file_data]}")
+      avatar.original_filename = player_params[:avatar_file_name]
+    end
 
     @game = Game.find_by(token: params[:token])
     @player = @game.add_player(
