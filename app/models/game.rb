@@ -16,6 +16,9 @@ class Game < ActiveRecord::Base
 
   MIN_PLAYERS_FOR_GAME = 3
 
+  NIGHT_ROUND_LENGTH = 30.seconds
+  DAY_ROUND_LENGTH = 45.seconds
+
   store :data, accessors: [:rounds], coder: JSON
 
   has_many :events
@@ -147,6 +150,7 @@ class Game < ActiveRecord::Base
       raise InvalidActionError, "Either source player #{source_player_id} or target player #{target_player_id} is not alive"
     end
 
+    # TODO: Fix this
     case name
     when 'kill'
       unless source_player.role == 'mafia'
@@ -181,15 +185,37 @@ class Game < ActiveRecord::Base
   private
 
   def create_new_round
-    start_time = Time.current + 10.seconds
+    # This will also force the first round to be 'night' since current_round will be nil
+    if current_round&.fetch('type', 'day') == 'day'
+      create_night_round
+    else
+      create_day_round
+    end
+  end
+
+  def create_day_round
     self.rounds << {
       'player_ids'        => self.players.where(state: 'alive').pluck(:id),
+      'type'              => 'DAY',
       'lynch_votes'       => {},
       'lynched_player_id' => nil,
       'kill_votes'        => {},
       'killed_player_id'  => nil,
-      'created_at'        => (start_time).to_json,
-      'expires_at'        => (start_time + 30.seconds).to_json,
+      'created_at'        => (Time.current).to_json,
+      'expires_at'        => (Time.current + DAY_ROUND_LENGTH).to_json,
+    }
+  end
+
+  def create_night_round
+    self.rounds << {
+      'player_ids'        => self.players.where(state: 'alive').pluck(:id),
+      'type'              => 'NIGHT',
+      'lynch_votes'       => {},
+      'lynched_player_id' => nil,
+      'kill_votes'        => {},
+      'killed_player_id'  => nil,
+      'created_at'        => (Time.current).to_json,
+      'expires_at'        => (Time.current + NIGHT_ROUND_LENGTH).to_json,
     }
   end
 

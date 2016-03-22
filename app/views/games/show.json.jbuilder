@@ -8,6 +8,7 @@ json.game do
 
   json.rounds @game.rounds do |round|
     json.player_ids        round.fetch('player_ids')
+    json.type              round.fetch('type')
     json.lynch_votes       round.fetch('lynch_votes')
     json.lynched_player_id round.fetch('lynched_player_id')
     json.kill_votes        round.fetch('kill_votes')
