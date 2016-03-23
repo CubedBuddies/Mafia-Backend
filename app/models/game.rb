@@ -186,7 +186,7 @@ class Game < ActiveRecord::Base
 
   def create_new_round
     # This will also force the first round to be 'night' since current_round will be nil
-    if current_round&.fetch('type', 'day') == 'day'
+    if current_round&.fetch('type', 'DAY') == 'DAY'
       create_night_round
     else
       create_day_round
