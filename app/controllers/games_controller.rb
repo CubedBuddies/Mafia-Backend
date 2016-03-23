@@ -26,10 +26,10 @@ class GamesController < ApplicationController
     @game = Game.create!
 
     unless Rails.env.test?
-      @game.add_player(name: "Test Player 1")
-      @game.add_player(name: "Test Player 2")
-      @game.add_player(name: "Test Player 3")
-      @game.add_player(name: "Test Player 4")
+      @game.add_player(name: "Vito Corleone")
+      @game.add_player(name: "Michael Corleone")
+      @game.add_player(name: "Luca Brasi")
+      @game.add_player(name: "Salvatore Tessio")
     end
 
     render template: 'games/show', status: :created
