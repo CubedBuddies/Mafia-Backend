@@ -57,6 +57,18 @@ class GamesController < ApplicationController
     end
 
     @game = Game.find_by(token: params[:token])
+    # TODO: easter egg / hack for test player avatars
+    case name
+    when 'Vito Corleone'
+      avatar = 'images/vito_corleone.jpg'
+    when 'Michael Corleone'
+      avatar = 'images/michael_corleone.jpg'
+    when 'Salvatore Tessio'
+      avatar = 'images/salvatore_tessio.jpg'
+    when 'Luca Brasi'
+      avatar = 'images/luca_brasi.jpg'
+    end
+
     @player = @game.add_player(
       name: name,
       avatar: avatar,
