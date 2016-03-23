@@ -58,7 +58,7 @@ class Game < ActiveRecord::Base
       num_townsperson = num_players - num_mafia
 
       # TODO: remove this, rigging for demo
-      if num_townsperson == 6
+      if num_players == 6
         roles = ['mafia', 'mafia', 'townsperson', 'townsperson', 'townsperson', 'townsperson']
       else
         roles = (['townsperson'] * num_townsperson) + (['mafia'] * num_mafia)
