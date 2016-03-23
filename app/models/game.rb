@@ -14,7 +14,7 @@
 class Game < ActiveRecord::Base
   extend Enumerize
 
-  MIN_PLAYERS_FOR_GAME = 3
+  MIN_PLAYERS_FOR_GAME = 5
 
   NIGHT_ROUND_LENGTH = 30.seconds
   DAY_ROUND_LENGTH = 45.seconds
@@ -51,14 +51,19 @@ class Game < ActiveRecord::Base
       num_players = self.players.count
 
       if num_players < MIN_PLAYERS_FOR_GAME
-        raise InvalidActionError, "Game has too few players.  Mafia requires 6 players to start and this game currently has #{num_players}."
+        raise InvalidActionError, "Game has too few players.  Mafia requires #{MIN_PLAYERS_FOR_GAME} players to start and this game currently has #{num_players}."
       end
 
       num_mafia = (num_players ** 0.5).floor
       num_townsperson = num_players - num_mafia
 
-      roles = (['townsperson'] * num_townsperson) + (['mafia'] * num_mafia)
-      roles.shuffle!
+      # TODO: remove this, rigging for demo
+      if num_townsperson == 6
+        roles = ['mafia', 'mafia', 'townsperson', 'townsperson', 'townsperson', 'townsperson']
+      else:
+        roles = (['townsperson'] * num_townsperson) + (['mafia'] * num_mafia)
+        roles.shuffle!
+      end
 
       self.players.zip(roles).each do |player, role|
         player.update!(
