@@ -59,7 +59,7 @@ class Game < ActiveRecord::Base
 
       # TODO: remove this, rigging for demo
       if num_players == 6
-        roles = ['mafia', 'mafia', 'townsperson', 'townsperson', 'townsperson', 'townsperson']
+        roles = ['mafia', 'townsperson', 'townsperson', 'townsperson', 'mafia', 'townsperson']
       else
         roles = (['townsperson'] * num_townsperson) + (['mafia'] * num_mafia)
         roles.shuffle!
