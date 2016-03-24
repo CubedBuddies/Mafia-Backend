@@ -26,10 +26,10 @@ class GamesController < ApplicationController
     @game = Game.create!
 
     unless Rails.env.test?
-      @game.add_player(name: "Vito Corleone")
-      @game.add_player(name: "Michael Corleone")
-      @game.add_player(name: "Luca Brasi")
-      @game.add_player(name: "Salvatore Tessio")
+      @game.add_player(name: "Vito Corleone", avatar: File.open(Rails.root.join('public', 'images', 'vito_corleone.jpg')))
+      @game.add_player(name: "Michael Corleone", avatar: File.open(Rails.root.join('public', 'images', 'michael_corleone.jpg')))
+      @game.add_player(name: "Luca Brasi", avatar: File.open(Rails.root.join('public', 'images', 'luca_brasi.jpg')))
+      @game.add_player(name: "Salvatore Tessio", avatar: File.open(Rails.root.join('public', 'images', 'salvatore_tessio.jpg')))
     end
 
     render template: 'games/show', status: :created
